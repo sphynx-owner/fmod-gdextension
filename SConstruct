@@ -129,11 +129,11 @@ elif env["platform"] == "android":
     env.Append(LIBS=[libfmod, libfmodstudio])
 
 elif env["platform"] == "web":
-    html_lib = os.path.join(fmod_lib_dir, 'api/studio/lib/w32/')
-    html_inc = os.path.join(fmod_lib_dir, 'api/studio/inc/')
+    html_lib = os.path.join(fmod_lib_dir, 'web/studio/lib/w32/')
+    html_inc = os.path.join(fmod_lib_dir, 'web/studio/inc/')
 
-    html_core_lib = os.path.join(fmod_lib_dir, 'api/core/lib/w32/')
-    html_core_inc = os.path.join(fmod_lib_dir, 'api/core/inc/')
+    html_core_lib = os.path.join(fmod_lib_dir, 'web/core/lib/w32/')
+    html_core_inc = os.path.join(fmod_lib_dir, 'web/core/inc/')
 
     libfmodstudio_path = os.path.join(html_lib, 'fmodstudio%s_wasm.a' % lfix)
 
