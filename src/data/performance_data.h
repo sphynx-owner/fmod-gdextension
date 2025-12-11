@@ -1,9 +1,9 @@
 #ifndef GODOTFMOD_PERFORMANCE_DATA_H
 #define GODOTFMOD_PERFORMANCE_DATA_H
 
-#include "classes/ref_counted.hpp"
+#include "core/object/ref_counted.h"
 
-namespace godot {
+//namespace godot {
     class FmodPerformanceData : public RefCounted {
         GDCLASS(FmodPerformanceData, RefCounted);
 
@@ -42,6 +42,6 @@ namespace godot {
         static void _bind_methods();
     };
 
-}// namespace godot
+//}
 
 #endif// GODOTFMOD_PERFORMANCE_DATA_H

@@ -2,9 +2,9 @@
 
 #include <constants.h>
 
-#include <classes/project_settings.hpp>
+#include <core/config/project_settings.h>
 
-using namespace godot;
+// using namespace godot;
 
 void FmodSoftwareFormatSettings::set_sample_rate(const int p_sample_rate) {
     _sample_rate = p_sample_rate;

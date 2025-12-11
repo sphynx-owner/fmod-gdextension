@@ -2,9 +2,9 @@
 
 #include <constants.h>
 
-#include <classes/project_settings.hpp>
+#include <core/config/project_settings.h>
 
-using namespace godot;
+// using namespace godot;
 
 void FmodGeneralSettings::set_channel_count(const int p_channel_count) {
     _channel_count = p_channel_count;

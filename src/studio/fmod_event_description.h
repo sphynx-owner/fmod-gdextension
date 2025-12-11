@@ -1,12 +1,12 @@
 #ifndef GODOTFMOD_FMOD_EVENT_DESCRIPTION_H
 #define GODOTFMOD_FMOD_EVENT_DESCRIPTION_H
 
-#include "classes/ref_counted.hpp"
+#include "core/object/ref_counted.h"
 #include "fmod_parameter_description.h"
 #include "fmod_studio.hpp"
 #include "helpers/common.h"
 
-namespace godot {
+//namespace godot {
     class FmodEventDescription  : public RefCounted {
         FMODCLASSWITHPATH(FmodEventDescription, RefCounted, FMOD::Studio::EventDescription);
 
@@ -46,5 +46,5 @@ namespace godot {
         protected:
             static void _bind_methods();
     };
-}// namespace godot
+//}
 #endif// GODOTFMOD_FMOD_EVENT_DESCRIPTION_H

@@ -4,9 +4,9 @@
 #include "fmod_common.h"
 
 #include <sstream>
-#include <variant/string.hpp>
+#include <core/string/ustring.h>
 
-namespace godot {
+//namespace godot {
 
     // Log level enumeration
     enum FMODLogLevel {
@@ -26,6 +26,6 @@ namespace godot {
     FMOD_RESULT fmod_debug_callback(FMOD_DEBUG_FLAGS flags, const char* file, int line, const char* func, const char* message);
     }
 
-}// namespace godot
+//}
 
 #endif

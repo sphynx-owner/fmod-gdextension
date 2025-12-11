@@ -3,9 +3,9 @@
 
 #include <fmod_server.h>
 
-#include <classes/engine.hpp>
+#include <core/config/engine.h>
 
-namespace godot {
+//namespace godot {
     template<class Derived, class NodeType>
     class FmodListener : public NodeType {
 
@@ -189,6 +189,6 @@ namespace godot {
     const StringName& FmodListener<Derived, NodeType>::get_class_static() {
         return Derived::get_class_static();
     }
-}// namespace godot
+//}
 
 #endif// GODOTFMOD_FMOD_LISTENER_H

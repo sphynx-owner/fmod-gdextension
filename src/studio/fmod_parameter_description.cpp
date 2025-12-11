@@ -2,7 +2,7 @@
 
 #include <helpers/common.h>
 
-using namespace godot;
+// using namespace godot;
 
 const String& FmodParameterDescription::get_name() const {
     return _name;

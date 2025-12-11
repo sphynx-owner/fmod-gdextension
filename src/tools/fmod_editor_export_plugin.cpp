@@ -7,13 +7,13 @@
 #include <helpers/common.h>
 #include <helpers/files.h>
 
-using namespace godot;
+// using namespace godot;
 
 constexpr const char* FMOD_FILE_EXTENSIONS[4] {".bank", ".ogg", ".mp3", ".wav"};
 constexpr const char* ANDROID_BUILD_DIRS[2] = { "res://android/build", "res:///android/build" };
 constexpr const char* FMOD_AUTO_EXPORT_BANKS_SETTINGS_KEY = "fmod/auto_export_banks";
 
-void FmodEditorExportPlugin::_export_begin(const PackedStringArray& features, bool is_debug, const String& path, uint32_t flags) {
+void FmodEditorExportPlugin::_export_begin(const HashSet<String> &features, bool is_debug, const String &path, int flags) {
 
     if (get_option(FMOD_AUTO_EXPORT_BANKS_SETTINGS_KEY) != Variant(false)) {
 
@@ -72,7 +72,7 @@ void FmodEditorExportPlugin::_export_begin(const PackedStringArray& features, bo
     } else if (is_ios_export) {
         PackedStringArray plugins_libraries_path = _get_libraries_to_export(plugins_settings, "ios", ".a");
         for (const String& library_path : plugins_libraries_path) {
-            add_ios_project_static_lib(library_path);
+            add_apple_embedded_platform_project_static_lib(library_path);
         }
 
         String cpp_code_declaration = R"(
@@ -143,7 +143,7 @@ extern "C" __attribute__((visibility("default"))) __attribute__((used)) uint32_t
     return handles;
 }
 )";
-        add_ios_cpp_code(
+        add_apple_embedded_platform_cpp_code(
                 vformat(
                         "%s%s%s",
                         cpp_code_declaration,
@@ -179,27 +179,14 @@ extern "C" __attribute__((visibility("default"))) __attribute__((used)) uint32_t
     }
 }
 
-String FmodEditorExportPlugin::_get_name() const {
+String FmodEditorExportPlugin::get_name() const {
     return "FmodEditorExportPlugin";
 }
 
-TypedArray<Dictionary> FmodEditorExportPlugin::_get_export_options(const Ref<EditorExportPlatform>& platform) const {
-    TypedArray<Dictionary> options;
-
-    {
-        Dictionary option_dict;
-        Dictionary option;
-        option["name"] = FMOD_AUTO_EXPORT_BANKS_SETTINGS_KEY;
-        option["type"] = Variant::BOOL;
-        
-        option_dict["option"] = option;
-        option_dict["default_value"] = true;
-        option_dict["update_visibility"] = true;
-        
-        options.append(option_dict);
+void FmodEditorExportPlugin::_get_export_options(const Ref<EditorExportPlatform> &platform, List<EditorExportPlatform::ExportOption> *options) const {
+    {       
+        options->push_back(EditorExportPlatform::ExportOption(PropertyInfo(Variant::BOOL, FMOD_AUTO_EXPORT_BANKS_SETTINGS_KEY, PROPERTY_HINT_NONE, ""), true, true));
     }
-    
-    return options;
 }
 
 void FmodEditorExportPlugin::_bind_methods() {}

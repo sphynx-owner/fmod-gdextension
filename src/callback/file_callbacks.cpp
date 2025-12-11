@@ -1,7 +1,7 @@
 #include "file_callbacks.h"
 
 namespace Callbacks {
-
+    //using namespace godot;
     GodotFileRunner* GodotFileRunner::get_singleton() {
         static GodotFileRunner singleton;
         return &singleton;
@@ -75,13 +75,13 @@ namespace Callbacks {
 
                 // We get the Godot File object from the handle
                 GodotFileHandle* handle {reinterpret_cast<GodotFileHandle*>(current_request->handle)};
-                godot::Ref<godot::FileAccess> file {handle->file};
+                Ref<FileAccess> file {handle->file};
 
                 // update the position of the cursor
                 file->seek(current_request->offset);
 
                 // We read and store the requested data in an array.
-                godot::PackedByteArray buffer {file->get_buffer(current_request->sizebytes)};
+                PackedByteArray buffer {file->get_buffer(current_request->sizebytes)};
                 int size {static_cast<int>(buffer.size())};
                 const uint8_t* data {buffer.ptr()};
 
@@ -122,9 +122,9 @@ namespace Callbacks {
     }
 
     FMOD_RESULT F_CALL godotFileOpen(const char* name, unsigned int* filesize, void** handle, void* userdata) {
-        godot::Ref<godot::FileAccess> access = godot::FileAccess::open(name, godot::FileAccess::ModeFlags::READ);
+        Ref<FileAccess> access = FileAccess::open(name, FileAccess::ModeFlags::READ);
 
-        if (access->get_error() == godot::Error::OK) {
+        if (access->get_error() == Error::OK) {
             *filesize = access->get_length();
             GodotFileHandle* fileHandle {new GodotFileHandle {access}};
             *handle = reinterpret_cast<void*>(fileHandle);
@@ -134,16 +134,16 @@ namespace Callbacks {
     }
 
     FMOD_RESULT F_CALL godotFileClose(void* handle, void* userdata) {
-        godot::Ref<godot::FileAccess> file {reinterpret_cast<GodotFileHandle*>(handle)->file};
+        Ref<FileAccess> file {reinterpret_cast<GodotFileHandle*>(handle)->file};
         delete reinterpret_cast<GodotFileHandle*>(handle);
         return FMOD_RESULT::FMOD_OK;
     }
 
     FMOD_RESULT F_CALL godotFileRead(void* handle, void* buffer, unsigned int sizebytes, unsigned int* bytesread, void* userdata) {
         GodotFileHandle* fileHandle {reinterpret_cast<GodotFileHandle*>(handle)};
-        godot::Ref<godot::FileAccess> file {fileHandle->file};
+        Ref<FileAccess> file {fileHandle->file};
 
-        godot::PackedByteArray data = file->get_buffer(sizebytes);
+        PackedByteArray data = file->get_buffer(sizebytes);
         const int read_size = static_cast<int>(data.size());
 
         if (read_size > 0) {
@@ -163,7 +163,7 @@ namespace Callbacks {
 
     FMOD_RESULT F_CALL godotFileSeek(void* handle, unsigned int pos, void* userdata) {
         GodotFileHandle* fileHandle {reinterpret_cast<GodotFileHandle*>(handle)};
-        godot::Ref<godot::FileAccess> file {fileHandle->file};
+        Ref<FileAccess> file {fileHandle->file};
 
         file->seek(pos);
 

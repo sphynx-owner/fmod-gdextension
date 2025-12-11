@@ -3,9 +3,9 @@
 
 #include "fmod_studio.h"
 
-#include <classes/resource.hpp>
+#include <core/io/resource.h>
 
-namespace godot {
+//namespace godot {
 
     class FmodLoggingSettings : public Resource {
         GDCLASS(FmodLoggingSettings, Resource)
@@ -53,7 +53,7 @@ namespace godot {
         static void _bind_methods();
     };
 
-}// namespace godot
+//}
 
 VARIANT_ENUM_CAST(FmodLoggingSettings::DebugLevel);
 VARIANT_ENUM_CAST(FMOD_DEBUG_MODE);

@@ -1,11 +1,11 @@
 #ifndef GODOTFMOD_PLUGINS_HELPER_H
 #define GODOTFMOD_PLUGINS_HELPER_H
 
-#include <variant/string.hpp>
+#include <core/string/ustring.h>
 #include <resources/fmod_plugins_settings.h>
-#include <classes/os.hpp>
+#include <core/os/os.h>
 
-namespace godot {
+//namespace godot {
     static String get_fmod_plugins_base_path(const Ref<FmodPluginsSettings>& p_settings) {
 #ifdef TOOLS_ENABLED
         return p_settings->get_plugins_base_path();
@@ -66,6 +66,6 @@ namespace godot {
 
         return result;
     }
-}
+//}
 
 #endif //GODOTFMOD_PLUGINS_HELPER_H

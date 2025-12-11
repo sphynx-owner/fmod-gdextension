@@ -3,7 +3,7 @@
 
 #include <fmod_common.h>
 
-#include <core/class_db.hpp>
+#include <core/object/class_db.h>
 
 #define REGISTER_ALL_CONSTANTS                                         \
     BIND_CONSTANT(FMOD_INIT_3D_RIGHTHANDED)                            \

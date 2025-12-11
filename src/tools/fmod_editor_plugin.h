@@ -6,16 +6,18 @@
 #include "fmod_editor_export_plugin.h"
 #include "studio/fmod_bank.h"
 
-#include <classes/editor_plugin.hpp>
+#include <editor/plugins/editor_plugin.h>
 
-namespace godot {
+//namespace godot {
     class FmodEditorPlugin : public EditorPlugin {
         GDCLASS(FmodEditorPlugin, EditorPlugin)
     public:
-        void _ready() override;
-
+        void _ready();
         FmodEditorPlugin() = default;
         ~FmodEditorPlugin() = default;
+
+    protected:
+        void _notification(int p_notification);
 
     private:
         static void add_setting(
@@ -29,7 +31,7 @@ namespace godot {
     protected:
         static void _bind_methods();
     };
-}
+//}
 
 #endif// GODOTFMOD_FMOD_EDITOR_PLUGIN_H
 

@@ -7,9 +7,9 @@
 #include "studio/fmod_bus.h"
 #include "studio/fmod_event_description.h"
 #include "studio/fmod_vca.h"
-#include "templates/hash_map.hpp"
+#include "core/templates/hash_map.h"
 
-namespace godot {
+//namespace godot {
     class FmodServer;
 
     struct FmodGuidHashMapHasher {
@@ -95,6 +95,6 @@ namespace godot {
         FMOD_GUID get_event_guid(const String& event_path);
         String get_event_path(const FMOD_GUID& guid);
     };
-}// namespace godot
+//}
 
 #endif// GODOTFMOD_FMOD_CACHE_H

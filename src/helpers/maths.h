@@ -2,13 +2,13 @@
 #define GODOTFMOD_MATHS_H
 
 #include "fmod_common.h"
-#include "variant/dictionary.hpp"
-#include "variant/transform2d.hpp"
-#include "variant/transform3d.hpp"
-#include "variant/vector2.hpp"
-#include "variant/vector3.hpp"
+#include "core/variant/dictionary.h"
+#include "core/math/transform_2d.h"
+#include "core/math/transform_3d.h"
+#include "core/math/vector2.h"
+#include "core/math/vector3.h"
 
-namespace godot {
+//namespace godot {
 
     static inline FMOD_VECTOR get_fmod_vector_from_3d(const Vector3& vec) {
         FMOD_VECTOR fv;
@@ -89,6 +89,6 @@ namespace godot {
         return {-attr.velocity.x, attr.velocity.z};
     }
 
-}// namespace godot
+//}
 
 #endif// GODOTFMOD_MATHS_H

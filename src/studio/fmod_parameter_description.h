@@ -2,9 +2,9 @@
 #define GODOTFMOD_FMOD_PARAMETER_DESCRIPTION_H
 
 #include "fmod_studio_common.h"
-#include <classes/ref_counted.hpp>
+#include <core/object/ref_counted.h>
 
-namespace godot {
+//namespace godot {
     class FmodParameterDescription : public RefCounted {
         GDCLASS(FmodParameterDescription, RefCounted)
 
@@ -34,6 +34,6 @@ namespace godot {
     protected:
         static void _bind_methods();
     };
-}
+//}
 
 #endif// GODOTFMOD_FMOD_PARAMETER_DESCRIPTION_H

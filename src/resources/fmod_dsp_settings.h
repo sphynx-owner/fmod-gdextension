@@ -1,9 +1,9 @@
 #ifndef GODOTFMOD_FMOD_DSP_SETTINGS_H
 #define GODOTFMOD_FMOD_DSP_SETTINGS_H
 
-#include <classes/resource.hpp>
+#include <core/io/resource.h>
 
-namespace godot {
+//namespace godot {
     class FmodDspSettings : public Resource {
         GDCLASS(FmodDspSettings, Resource)
 
@@ -34,6 +34,6 @@ namespace godot {
     protected:
         static void _bind_methods();
     };
-}
+//}
 
 #endif// GODOTFMOD_FMOD_DSP_SETTINGS_H

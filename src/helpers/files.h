@@ -1,10 +1,10 @@
 #ifndef GODOTFMOD_FILES_H
 #define GODOTFMOD_FILES_H
 
-#include <classes/dir_access.hpp>
-#include <variant/packed_string_array.hpp>
+#include <core/io/dir_access.h>
+#include <core/variant/variant.h>
 
-namespace godot {
+//namespace godot {
     static void list_files_in_folder(PackedStringArray& result, const String& folder, const String& extension = "",
                                      const PackedStringArray& excluded_folders = PackedStringArray()) {
         for (const String& excluded : excluded_folders) {
@@ -38,6 +38,6 @@ namespace godot {
         }
         folder_access->list_dir_end();
     }
-}
+//}
 
 #endif// GODOTFMOD_FILES_H

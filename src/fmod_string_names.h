@@ -2,10 +2,10 @@
 #define GODOTFMOD_FMOD_STRING_NAMES_H
 
 
-#include "godot.hpp"
-#include "variant/string_name.hpp"
+#include "modules\register_module_types.h"
+#include "core/string/string_name.h"
 
-using namespace godot;
+
 
 class FmodStringNames {
     friend void initialize_fmod_module(ModuleInitializationLevel p_level);

@@ -1,14 +1,14 @@
 #ifndef GODOTFMOD_FMOD_BANK_H
 #define GODOTFMOD_FMOD_BANK_H
 
-#include "classes/ref_counted.hpp"
+#include "core/object/ref_counted.h"
 #include "fmod_bus.h"
 #include "fmod_event_description.h"
 #include "fmod_studio.hpp"
 #include "fmod_vca.h"
 #include "helpers/common.h"
 
-namespace godot {
+//namespace godot {
     class FmodBank : public RefCounted {
         FMODCLASSWITHPATH(FmodBank, RefCounted, FMOD::Studio::Bank);
 
@@ -53,5 +53,5 @@ namespace godot {
     protected:
         static void _bind_methods();
     };
-}// namespace godot
+//}
 #endif// GODOTFMOD_FMOD_BANK_H

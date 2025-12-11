@@ -2,9 +2,9 @@
 #include "fmod_cache.h"
 
 #include "helpers/common.h"
-#include "classes/project_settings.hpp"
+#include "core/config/project_settings.h"
 
-using namespace godot;
+// using namespace godot;
 
 FmodCache::FmodCache(FMOD::Studio::System* p_system, FMOD::System* p_core_system) :
     system(p_system), core_system(p_core_system) {

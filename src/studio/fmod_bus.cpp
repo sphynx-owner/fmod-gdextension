@@ -2,7 +2,7 @@
 
 #include "helpers/common.h"
 
-using namespace godot;
+// using namespace godot;
 
 void FmodBus::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_mute"), &FmodBus::get_mute);

@@ -4,7 +4,7 @@
 #include "fmod_studio.hpp"
 #include "helpers/common.h"
 
-namespace godot {
+//namespace godot {
     class FmodBus : public RefCounted {
         FMODCLASSWITHPATH(FmodBus, RefCounted, FMOD::Studio::Bus);
 
@@ -23,5 +23,5 @@ namespace godot {
         protected:
             static void _bind_methods();
     };
-}// namespace godot
+//}
 #endif// GODOTFMOD_FMOD_BUS_H

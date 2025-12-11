@@ -1,11 +1,11 @@
 #ifndef GODOTFMOD_FMOD_EVENT_H
 #define GODOTFMOD_FMOD_EVENT_H
 
-#include "classes/ref_counted.hpp"
+#include "core/object/ref_counted.h"
 #include "fmod_studio.hpp"
 #include "helpers/common.h"
 
-namespace godot {
+//namespace godot {
     class FmodEvent : public RefCounted {
         FMODCLASS(FmodEvent, RefCounted, FMOD::Studio::EventInstance);
 
@@ -59,7 +59,7 @@ namespace godot {
     protected:
         static void _bind_methods();
     };
-}// namespace godot
+//}
 
 VARIANT_ENUM_CAST(FMOD_STUDIO_PLAYBACK_STATE)
 

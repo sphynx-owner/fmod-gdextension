@@ -2,7 +2,7 @@
 
 #include "helpers/common.h"
 
-using namespace godot;
+// using namespace godot;
 
 void FmodVCA::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_volume"), &FmodVCA::get_volume);

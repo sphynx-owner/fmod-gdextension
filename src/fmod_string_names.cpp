@@ -1,6 +1,6 @@
 #include "fmod_string_names.h"
 
-using namespace godot;
+// using namespace godot;
 
 FmodStringNames* FmodStringNames::instance = nullptr;
 

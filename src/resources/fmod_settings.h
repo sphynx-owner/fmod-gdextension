@@ -3,9 +3,9 @@
 
 #include "fmod_studio.h"
 
-#include <classes/resource.hpp>
+#include <core/io/resource.h>
 
-namespace godot {
+//namespace godot {
     class FmodGeneralSettings : public Resource {
         GDCLASS(FmodGeneralSettings, Resource)
     public:
@@ -56,6 +56,6 @@ namespace godot {
         static void _bind_methods();
 
     };
-}
+//}
 
 #endif// GODOTFMOD_FMOD_SETTINGS_H

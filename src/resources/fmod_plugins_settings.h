@@ -2,9 +2,9 @@
 #define GODOTFMOD_FMOD_PLUGINS_SETTINGS_H
 
 
-#include <classes/resource.hpp>
+#include <core/io/resource.h>
 
-namespace godot {
+//namespace godot {
     class FmodStaticPluginMethod : public Resource {
         GDCLASS(FmodStaticPluginMethod, Resource)
 
@@ -62,9 +62,11 @@ namespace godot {
     protected:
         static void _bind_methods();
     };
-}
+//}
 
-VARIANT_ENUM_CAST(godot::FmodStaticPluginMethod::Type);
+//namespace godot {
+VARIANT_ENUM_CAST(FmodStaticPluginMethod::Type);
+//}
 
 
 #endif //GODOTFMOD_FMOD_PLUGINS_SETTINGS_H

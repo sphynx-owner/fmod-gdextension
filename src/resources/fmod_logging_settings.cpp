@@ -2,10 +2,10 @@
 
 #include <constants.h>
 
-#include <classes/project_settings.hpp>
-#include <godot_cpp/classes/os.hpp>
+#include <core/config/project_settings.h>
+#include <core/os/os.h>
 
-using namespace godot;
+// using namespace godot;
 
 void FmodLoggingSettings::set_debug_level(int p_debug_level) {
     _debug_level = p_debug_level;

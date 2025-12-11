@@ -1,6 +1,7 @@
 #ifndef GODOTFMOD_FMOD_SERVER_H
 #define GODOTFMOD_FMOD_SERVER_H
 
+#include <core/core_bind.h>
 #include "core/fmod_file.h"
 #include "core/fmod_sound.h"
 #include "data/performance_data.h"
@@ -11,10 +12,10 @@
 #include "studio/fmod_event.h"
 #include "studio/fmod_event_description.h"
 #include "studio/fmod_vca.h"
-#include "templates/hash_map.hpp"
-#include "templates/local_vector.hpp"
-#include "templates/vector.hpp"
-#include "variant/string.hpp"
+#include "core/templates/hash_map.h"
+#include "core/templates/local_vector.h"
+#include "core/templates/vector.h"
+#include "core/string/ustring.h"
 
 #include <callback/event_callbacks.h>
 #include <callback/file_callbacks.h>
@@ -24,17 +25,16 @@
 #include <resources/fmod_software_format_settings.h>
 #include <resources/fmod_sound_3d_settings.h>
 
-#include <classes/canvas_item.hpp>
-#include <classes/global_constants.hpp>
-#include <classes/mutex.hpp>
-#include <classes/object.hpp>
-#include <core/object.hpp>
+#include <scene/main/canvas_item.h>
+#include <core/math/math_defs.h>
+#include <core/object/object.h>
+#include <core/object/object.h>
 #include <fmod.hpp>
 #include <fmod_studio.hpp>
-#include <godot.hpp>
-#include <variant/utility_functions.hpp>
+//#include <godot.hpp>
+#include <core/variant/variant_utility.h>
 
-namespace godot {
+//namespace godot {
 
     struct OneShot {
         NodeWrapper wrapper;
@@ -49,7 +49,7 @@ namespace godot {
 
     struct Callback {
         FMOD_STUDIO_EVENT_CALLBACK_TYPE type;
-        godot::Callable callable;
+        /*godot::*/Callable callable;
         Dictionary fmod_callback_properties;
     };
 
@@ -107,7 +107,7 @@ namespace godot {
         // call_deferred is not implemented in godot-cpp.
         // Would have prefered a SpinLock but does not seems to exist in godot-cpp.
         // TODO: Change when https://github.com/godotengine/godot-cpp/pull/1091 is merged.
-        Ref<Mutex> callback_mutex;
+        Ref<CoreBind::Mutex> callback_mutex;
         List<Callback> callbacks_to_process;
 
 
@@ -348,6 +348,6 @@ namespace godot {
             p_event->set_parameter_by_name(*parameter.identifier.name, parameter.value);
         }
     }
-}// namespace godot
+//}
 
 #endif// GODOTFMOD_FMOD_SERVER_H

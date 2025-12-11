@@ -1,10 +1,10 @@
 #ifndef GODOTFMOD_FMOD_SOUND_H
 #define GODOTFMOD_FMOD_SOUND_H
 
-#include "classes/ref_counted.hpp"
+#include "core/object/ref_counted.h"
 #include "fmod.hpp"
 
-namespace godot {
+//namespace godot {
     class FmodSound : public RefCounted {
         GDCLASS(FmodSound, RefCounted);
 
@@ -36,6 +36,6 @@ namespace godot {
     protected:
         static void _bind_methods();
     };
-}// namespace godot
+//}
 
 #endif// GODOTFMOD_FMOD_SOUND_H

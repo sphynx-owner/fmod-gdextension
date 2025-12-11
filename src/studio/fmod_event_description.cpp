@@ -4,7 +4,7 @@
 #include "fmod_parameter_description.h"
 #include "helpers/common.h"
 
-using namespace godot;
+// using namespace godot;
 
 constexpr const uint32_t PARAMETER_LABEL_BUFFER_SIZE {256};
 
@@ -66,7 +66,7 @@ Array FmodEventDescription::get_instance_list() {
 
         if (ERROR_CHECK_WITH_REASON(_wrapped->getInstanceList(instances.ptrw(), size, &size), vformat("Cannot get instances list for event %s with guid %s", get_path(), get_guid_as_string()))) {
             for (int i = 0; i < size; ++i) {
-                godot::FmodEvent* event_instance;
+                /*godot::*/FmodEvent* event_instance;
                 instances[i]->getUserData((void**) &event_instance);
                 array.append(Ref(event_instance));
             }

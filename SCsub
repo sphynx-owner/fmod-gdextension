@@ -21,8 +21,6 @@ module_env = env.Clone()
 
 # Add those directory manually, so we can skip the godot_cpp directory when including headers in C++ files
 source_path = [
-    os.path.join("godot-cpp", "include","godot_cpp"),
-    os.path.join("godot-cpp", "gen", "include","godot_cpp")
 ]
 module_env.Append(CPPPATH=[module_env.Dir(d) for d in source_path])
 

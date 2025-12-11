@@ -25,10 +25,10 @@
 #include <studio/fmod_parameter_description.h>
 #include <tools/fmod_editor_plugin.h>
 
-#include <classes/engine.hpp>
-#include <classes/project_settings.hpp>
+#include <core/core_bind.h>
+#include <core/config/project_settings.h>
 
-using namespace godot;
+// using namespace godot;
 
 static FmodServer* fmod_singleton;
 
@@ -107,7 +107,7 @@ void initialize_fmod_module(ModuleInitializationLevel p_level) {
         // Server
         ClassDB::register_class<FmodServer>();
         fmod_singleton = memnew(FmodServer);
-        Engine::get_singleton()->register_singleton("FmodServer", FmodServer::get_singleton());
+        CoreBind::Engine::get_singleton()->register_singleton("FmodServer", FmodServer::get_singleton());
         initialize_fmod();
     }
 #ifdef TOOLS_ENABLED
@@ -127,23 +127,23 @@ void uninitialize_fmod_module(ModuleInitializationLevel p_level) {
     if (p_level == MODULE_INITIALIZATION_LEVEL_SCENE) {
         fmod_singleton->shutdown();
 
-        Engine::get_singleton()->unregister_singleton("FmodServer");
+        CoreBind::Engine::get_singleton()->unregister_singleton("FmodServer");
         memdelete(fmod_singleton);
     }
 }
 
-extern "C" {
+// extern "C" {
 
-// Initialization.
+// // Initialization.
 
-GDExtensionBool GDE_EXPORT
-fmod_library_init(GDExtensionInterfaceGetProcAddress p_get_proc_address, GDExtensionClassLibraryPtr p_library, GDExtensionInitialization *r_initialization) {
-    GDExtensionBinding::InitObject init_obj(p_get_proc_address, p_library, r_initialization);
+// GDExtensionBool GDE_EXPORT
+// fmod_library_init(GDExtensionInterfaceGetProcAddress p_get_proc_address, GDExtensionClassLibraryPtr p_library, GDExtensionInitialization *r_initialization) {
+//     GDExtensionBinding::InitObject init_obj(p_get_proc_address, p_library, r_initialization);
 
-    init_obj.register_initializer(initialize_fmod_module);
-    init_obj.register_terminator(uninitialize_fmod_module);
-    init_obj.set_minimum_library_initialization_level(MODULE_INITIALIZATION_LEVEL_CORE);
+//     init_obj.register_initializer(initialize_fmod_module);
+//     init_obj.register_terminator(uninitialize_fmod_module);
+//     init_obj.set_minimum_library_initialization_level(MODULE_INITIALIZATION_LEVEL_CORE);
 
-    return init_obj.init();
-}
-}
+//     return init_obj.init();
+// }
+// }

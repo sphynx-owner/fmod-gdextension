@@ -4,7 +4,7 @@
 #include "helpers/maths.h"
 #include "fmod_event.h"
 
-using namespace godot;
+// using namespace godot;
 
 void FmodEvent::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_parameter_by_name", "parameter_name"), &FmodEvent::get_parameter_by_name);

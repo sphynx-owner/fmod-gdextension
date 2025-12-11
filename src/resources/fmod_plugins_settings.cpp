@@ -4,11 +4,11 @@
 
 #include <helpers/common.h>
 
-#include <classes/file_access.hpp>
-#include <classes/project_settings.hpp>
-#include <classes/resource_loader.hpp>
+#include <core/io/file_access.h>
+#include <core/config/project_settings.h>
+#include <core/io/resource_loader.h>
 
-using namespace godot;
+// using namespace godot;
 
 void FmodPluginsSettings::set_plugins_base_path(const String& p_base_path) {
     _plugins_base_path = p_base_path;
@@ -39,7 +39,7 @@ Ref<FmodPluginsSettings> FmodPluginsSettings::get_from_project_settings() {
         return settings;
     }
 
-    if (!FileAccess::file_exists(resource_path)) {
+    if (!FileAccess::create(FileAccess::ACCESS_RESOURCES)->file_exists(resource_path)) {
         GODOT_LOG_WARNING(vformat("Cannot find FmodPluginsSettings at %s", resource_path));
 
         Ref<FmodPluginsSettings> settings;
@@ -47,7 +47,7 @@ Ref<FmodPluginsSettings> FmodPluginsSettings::get_from_project_settings() {
         return settings;
     }
 
-    Ref<FmodPluginsSettings> settings = ResourceLoader::get_singleton()->load(resource_path);
+    Ref<FmodPluginsSettings> settings = ResourceLoader::load(resource_path);
     return settings;
 }
 

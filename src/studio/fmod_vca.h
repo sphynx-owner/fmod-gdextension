@@ -1,11 +1,11 @@
 #ifndef GODOTFMOD_FMOD_VCA_H
 #define GODOTFMOD_FMOD_VCA_H
 
-#include "classes/ref_counted.hpp"
+#include "core/object/ref_counted.h"
 #include "fmod_studio.hpp"
 #include "helpers/common.h"
 
-namespace godot {
+//namespace godot {
     class FmodVCA  : public RefCounted {
         FMODCLASSWITHPATH(FmodVCA, RefCounted, FMOD::Studio::VCA);
 
@@ -19,5 +19,5 @@ namespace godot {
         protected:
             static void _bind_methods();
     };
-}// namespace godot
+//}
 #endif// GODOTFMOD_FMOD_VCA_H

@@ -1,28 +1,28 @@
 #ifndef GODOTFMOD_COMMON_H
 #define GODOTFMOD_COMMON_H
 
-#include "classes/canvas_item.hpp"
-#include "classes/node3d.hpp"
+#include "scene/main/canvas_item.h"
+#include "scene/3d/node_3d.h"
 #include "fmod_common.h"
-#include "variant/utility_functions.hpp"
+#include "core/variant/variant_utility.h"
 
 #include <fmod_errors.h>
 #include <fmod_studio_common.h>
 #include <helpers/current_function.h>
 
-#include <godot.hpp>
-#include <variant/utility_functions.hpp>
+//#include <godot.hpp>
+#include <core/variant/variant_utility.h>
 
 #define MAX_PATH_SIZE 512
 #define MAX_DRIVER_NAME_SIZE 256
 
-#define GODOT_LOG_INFO(message) UtilityFunctions::print(message);
-#define GODOT_LOG_VERBOSE(message) UtilityFunctions::print_verbose(message);
-#define GODOT_LOG_WARNING(message) UtilityFunctions::push_warning(message, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
-#define GODOT_LOG_ERROR(message) UtilityFunctions::push_error(message, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
+#define GODOT_LOG_INFO(message) //VariantUtilityFunctions::print(message);
+#define GODOT_LOG_VERBOSE(message) //VariantUtilityFunctions::print_verbose(message);
+#define GODOT_LOG_WARNING(message) //VariantUtilityFunctions::push_warning(message, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
+#define GODOT_LOG_ERROR(message) //VariantUtilityFunctions::push_error(message, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
 
 #define ERROR_CHECK_WITH_REASON(_result, _reason) \
-(((_result) != FMOD_OK) ? (godot::UtilityFunctions::push_error(_reason, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__), false) : true)
+(((_result) != FMOD_OK) ? (/*godot::VariantUtilityFunctions::push_error(_reason, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__),*/ false) : true)
 
 #define ERROR_CHECK(_result) ((_result) == FMOD_OK)
 
@@ -96,7 +96,7 @@ public:                                                                  \
                                                                          \
 private:
 
-namespace godot {
+//namespace godot {
 
     class NodeWrapper {
         Node* node {nullptr};
@@ -110,7 +110,7 @@ namespace godot {
 
     public:
         bool is_valid() const {
-            if (!node || !id.is_valid() || !UtilityFunctions::is_instance_id_valid(id)) { return false; }
+            if (!node || !id.is_valid() || !VariantUtilityFunctions::is_instance_id_valid(id)) { return false; }
             return node->is_inside_tree();
         }
 
@@ -184,6 +184,6 @@ namespace godot {
         && first.Data4[6] == second.Data4[6]
         && first.Data4[7] == second.Data4[7];
     }
-}// namespace godot
+//}
 
 #endif// GODOTFMOD_COMMON_H

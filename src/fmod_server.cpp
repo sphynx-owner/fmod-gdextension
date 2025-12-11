@@ -1,6 +1,6 @@
-#include "classes/dir_access.hpp"
-#include "classes/engine.hpp"
-#include "classes/os.hpp"
+#include "core/io/dir_access.h"
+#include "core/config/engine.h"
+#include "core/os/os.h"
 #include "core/fmod_sound.h"
 #include "data/performance_data.h"
 #include "fmod_logging.h"
@@ -11,10 +11,10 @@
 
 #include <fmod_server.h>
 
-#include <classes/node3d.hpp>
-#include <classes/project_settings.hpp>
+#include <scene/3d/node_3d.h>
+#include <core/config/project_settings.h>
 
-using namespace godot;
+// using namespace godot;
 
 FmodServer* FmodServer::singleton = nullptr;
 
@@ -259,7 +259,7 @@ void FmodServer::update() {
     callback_mutex->lock();
     for (const Callback& callback : callbacks_to_process) {
         if (!callback.callable.is_valid()) { continue; }// Don't run the callback if the object has been killed
-        godot::Array args = godot::Array();
+        /*godot::*/Array args = /*godot::*/Array();
         args.append(callback.fmod_callback_properties);
         args.append(callback.type);
         callback.callable.callv(args);
@@ -513,7 +513,7 @@ Ref<FmodBank> FmodServer::load_bank(const String& pathToBank, unsigned int flag)
     if (cache->has_bank(pathToBank)) { return cache->get_bank(pathToBank); }// bank is already loaded
 
 #ifdef DEBUG_ENABLED
-    if (!FileAccess::file_exists(pathToBank)) {
+    if (!FileAccess::create(FileAccess::ACCESS_RESOURCES)->file_exists(pathToBank)) {
         GODOT_LOG_ERROR(vformat("Cannot load bank at %s", pathToBank))
         return {};
     }
@@ -524,7 +524,7 @@ Ref<FmodBank> FmodServer::load_bank(const String& pathToBank, unsigned int flag)
 
 void FmodServer::unload_bank(const String& pathToBank) {
 #ifdef DEBUG_ENABLED
-    if (!FileAccess::file_exists(pathToBank)) {
+    if (!FileAccess::create(FileAccess::ACCESS_RESOURCES)->file_exists(pathToBank)) {
         GODOT_LOG_ERROR(vformat("Cannot unload bank at %s", pathToBank))
         return;
     }

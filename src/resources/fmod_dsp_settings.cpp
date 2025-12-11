@@ -2,9 +2,9 @@
 
 #include <constants.h>
 
-#include <classes/project_settings.hpp>
+#include <core/config/project_settings.h>
 
-using namespace godot;
+// using namespace godot;
 
 void FmodDspSettings::set_dsp_buffer_size(const unsigned int p_dsp_buffer_size) {
     _dsp_buffer_size = p_dsp_buffer_size;

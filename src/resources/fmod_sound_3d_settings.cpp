@@ -2,9 +2,9 @@
 
 #include <constants.h>
 
-#include <classes/project_settings.hpp>
+#include <core/config/project_settings.h>
 
-using namespace godot;
+// using namespace godot;
 
 void FmodSound3DSettings::set_doppler_scale(const float p_doppler_scale) {
     _doppler_scale = p_doppler_scale;

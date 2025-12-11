@@ -1,13 +1,13 @@
 #include "fmod_logging.h"
 
-#include <classes/project_settings.hpp>
+#include <core/config/project_settings.h>
 #include <fmod.hpp>
 #include <sstream>
-#include <variant/string.hpp>
-#include <variant/utility_functions.hpp>
+#include <core/string/ustring.h>
+#include <core/variant/variant_utility.h>
 #include <resources/fmod_logging_settings.h>
 
-namespace godot {
+//namespace godot {
 
     // initialize FMOD logging based on project settings
     void logging_init() {
@@ -31,7 +31,7 @@ namespace godot {
                 }
 
                 case FMOD_DEBUG_MODE_FILE: {
-                    UtilityFunctions::push_warning("FMOD log output set to File");
+                    //VariantUtilityFunctions::push_warning("FMOD log output set to File");
                     // Output to a file
                     String file_path = p_logging_settings->get_log_file_path();
                     CharString file_path_utf8 = file_path.utf8();
@@ -39,14 +39,14 @@ namespace godot {
                     file_path = ProjectSettings::get_singleton()->globalize_path(file_path);
                     file_path_utf8 = file_path.utf8();
 
-                    FMOD::Debug_Initialize(debug_flags, FMOD_DEBUG_MODE_FILE, nullptr, file_path_utf8);
+                    FMOD::Debug_Initialize(debug_flags, FMOD_DEBUG_MODE_FILE, nullptr, file_path_utf8.ptr());
                     break;
                 }
 
                 default: {
                     // Fallback to TTY if somehow an invalid value is set
                     FMOD::Debug_Initialize(debug_flags, FMOD_DEBUG_MODE_TTY, nullptr, nullptr);
-                    UtilityFunctions::push_warning("Invalid FMOD log output setting, defaulting to TTY");
+                    //VariantUtilityFunctions::push_warning("Invalid FMOD log output setting, defaulting to TTY");
                     break;
                 }
             }
@@ -57,17 +57,17 @@ namespace godot {
     void log_fmod_message(FMODLogLevel level, const String& message) {
         switch (level) {
             case LOG_ERROR:
-                UtilityFunctions::push_error(message);
+                //VariantUtilityFunctions::push_error(message);
                 break;
             case LOG_WARNING:
-                UtilityFunctions::push_warning(message);
+                //VariantUtilityFunctions::push_warning(message);
                 break;
             case LOG_VERBOSE:
-                UtilityFunctions::print_verbose(message);
+                //VariantUtilityFunctions::print_verbose(message);
                 break;
             case LOG_INFO:
             default:
-                UtilityFunctions::print(message);
+                //VariantUtilityFunctions::print(message);
                 break;
         }
     }
@@ -116,4 +116,4 @@ namespace godot {
     }
     }
 
-}// namespace godot
+//}

@@ -3,7 +3,7 @@
 #include "helpers/common.h"
 #include "fmod_server.h"
 
-using namespace godot;
+// using namespace godot;
 
 void FmodBank::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_loading_state"), &FmodBank::get_loading_state);

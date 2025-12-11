@@ -1,14 +1,14 @@
 #ifndef GODOTFMOD_FMOD_EVENT_EMITTER_H
 #define GODOTFMOD_FMOD_EVENT_EMITTER_H
 
-#include "classes/object.hpp"
+#include "core/object/object.h"
 
 #include <constants.h>
 #include <fmod_server.h>
 #include <fmod_string_names.h>
 
-#include <classes/engine.hpp>
-#include <classes/project_settings.hpp>
+#include <core/config/engine.h>
+#include <core/config/project_settings.h>
 
 static constexpr const char* BEAT_SIGNAL_STRING = "timeline_beat";
 static constexpr const char* MARKER_SIGNAL_STRING = "timeline_marker";
@@ -17,7 +17,7 @@ static constexpr const char* STARTED_SIGNAL_STRING = "started";
 static constexpr const char* RESTARTED_SIGNAL_STRING = "restarted";
 static constexpr const char* STOPPED_SIGNAL_STRING = "stopped";
 
-namespace godot {
+//namespace godot {
 
     template<class Derived, class NodeType>
     class FmodEventEmitter : public NodeType {
@@ -471,7 +471,7 @@ namespace godot {
 
     template<class Derived, class NodeType>
     void FmodEventEmitter<Derived, NodeType>::_stop_and_restart_if_autoplay() {
-        if (!reinterpret_cast<Derived*>(this)->is_node_ready()) return;
+        if (!reinterpret_cast<Derived*>(this)->is_ready()) return;
 
         stop();
 
@@ -616,10 +616,10 @@ namespace godot {
 
     template<class Derived, class NodeType>
     bool FmodEventEmitter<Derived, NodeType>::_set(const StringName& p_name, const Variant& p_property) {
-        if (!p_name.begins_with(FmodStringNames::EVENT_PARAMETER_PREFIX_FOR_PROPERTIES)) { return false; }
+        if (!String(p_name).begins_with(FmodStringNames::EVENT_PARAMETER_PREFIX_FOR_PROPERTIES)) { return false; }
         if (p_name == FmodStringNames::get_instance()->event_parameter_prefix_for_properties) { return false; }
 
-        PackedStringArray parts {p_name.trim_prefix(vformat("%s/", FmodStringNames::EVENT_PARAMETER_PREFIX_FOR_PROPERTIES)).split("/")};
+        PackedStringArray parts {String(p_name).trim_prefix(vformat("%s/", FmodStringNames::EVENT_PARAMETER_PREFIX_FOR_PROPERTIES)).split("/")};
 
         const String& parameter_name {parts[0]};
 
@@ -670,10 +670,10 @@ namespace godot {
 
     template<class Derived, class NodeType>
     bool FmodEventEmitter<Derived, NodeType>::_get(const StringName& p_name, Variant& r_property) const {
-        if (!p_name.begins_with(FmodStringNames::EVENT_PARAMETER_PREFIX_FOR_PROPERTIES)) { return false; }
+        if (!String(p_name).begins_with(FmodStringNames::EVENT_PARAMETER_PREFIX_FOR_PROPERTIES)) { return false; }
         if (p_name == FmodStringNames::get_instance()->event_parameter_prefix_for_properties) { return false; }
 
-        PackedStringArray parts {p_name.trim_prefix(vformat("%s/", FmodStringNames::EVENT_PARAMETER_PREFIX_FOR_PROPERTIES)).split("/")};
+        PackedStringArray parts {String(p_name).trim_prefix(vformat("%s/", FmodStringNames::EVENT_PARAMETER_PREFIX_FOR_PROPERTIES)).split("/")};
 
         Parameter* parameter {_find_parameter(parts[0])};
 
@@ -705,10 +705,10 @@ namespace godot {
 
     template<class Derived, class NodeType>
     bool FmodEventEmitter<Derived, NodeType>::_property_can_revert(const StringName& p_name) const {
-        if (!p_name.begins_with(FmodStringNames::EVENT_PARAMETER_PREFIX_FOR_PROPERTIES)) { return false; }
+        if (!String(p_name).begins_with(FmodStringNames::EVENT_PARAMETER_PREFIX_FOR_PROPERTIES)) { return false; }
         if (p_name == FmodStringNames::get_instance()->event_parameter_prefix_for_properties) { return false; }
 
-        PackedStringArray parts {p_name.trim_prefix(vformat("%s/", FmodStringNames::EVENT_PARAMETER_PREFIX_FOR_PROPERTIES)).split("/")};
+        PackedStringArray parts {String(p_name).trim_prefix(vformat("%s/", FmodStringNames::EVENT_PARAMETER_PREFIX_FOR_PROPERTIES)).split("/")};
 
         if (parts.size() == 1) { return true; }
 
@@ -717,10 +717,10 @@ namespace godot {
 
     template<class Derived, class NodeType>
     bool FmodEventEmitter<Derived, NodeType>::_property_get_revert(const StringName& p_name, Variant& r_property) const {
-        if (!p_name.begins_with(FmodStringNames::EVENT_PARAMETER_PREFIX_FOR_PROPERTIES)) { return false; }
+        if (!String(p_name).begins_with(FmodStringNames::EVENT_PARAMETER_PREFIX_FOR_PROPERTIES)) { return false; }
         if (p_name == FmodStringNames::get_instance()->event_parameter_prefix_for_properties) { return false; }
 
-        PackedStringArray parts {p_name.trim_prefix(vformat("%s/", FmodStringNames::EVENT_PARAMETER_PREFIX_FOR_PROPERTIES)).split("/")};
+        PackedStringArray parts {String(p_name).trim_prefix(vformat("%s/", FmodStringNames::EVENT_PARAMETER_PREFIX_FOR_PROPERTIES)).split("/")};
 
         Parameter* parameter {_find_parameter(parts[0])};
 
@@ -892,5 +892,5 @@ namespace godot {
         ADD_SIGNAL(MethodInfo(RESTARTED_SIGNAL_STRING));
         ADD_SIGNAL(MethodInfo(STOPPED_SIGNAL_STRING));
     }
-}// namespace godot
+//}
 #endif// GODOTFMOD_FMOD_EVENT_EMITTER_H

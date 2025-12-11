@@ -3,7 +3,7 @@
 #include "fmod_editor_plugin.h"
 
 #include "fmod_editor_export_plugin.h"
-#include "classes/os.hpp"
+#include "core/os/os.h"
 #include "resources/fmod_plugins_settings.h"
 
 #include <constants.h>
@@ -16,9 +16,9 @@
 #include <resources/fmod_sound_3d_settings.h>
 #include <resources/fmod_logging_settings.h>
 
-#include <classes/project_settings.hpp>
+#include <core/config/project_settings.h>
 
-using namespace godot;
+// using namespace godot;
 
 void FmodEditorPlugin::_ready() {
     add_setting(
@@ -153,9 +153,18 @@ void FmodEditorPlugin::add_setting(
         ProjectSettings::get_singleton()->set_setting(p_name, p_default_value);
     }
 
-    ProjectSettings::get_singleton()->add_property_info(setting);
+    ProjectSettings::get_singleton()->call("add_property_info", setting);
     ProjectSettings::get_singleton()->set_as_basic(p_name, true);
     ProjectSettings::get_singleton()->set_initial_value(p_name, p_default_value);
+}
+
+void FmodEditorPlugin::_notification(int p_notification)
+{
+  switch(p_notification){
+    case NOTIFICATION_READY: {
+      _ready();
+		} break;
+  }
 }
 
 void FmodEditorPlugin::_bind_methods() {}

@@ -4,8 +4,8 @@
 #include <fmod_common.h>
 #include <fmod_studio_common.h>
 
-#include <classes/file_access.hpp>
-#include <classes/ref.hpp>
+#include <core/io/file_access.h>
+#include <core/object/ref_counted.h>
 #include <cstring>// This include is required for both Linux and MacOS targets as they don't include the necessary headers for 'memcpy' by default
 
 #if !defined(WEB_ENABLED)
@@ -15,8 +15,9 @@
 #endif
 
 namespace Callbacks {
+    //using namespace godot;
     struct GodotFileHandle {
-        godot::Ref<godot::FileAccess> file;
+        Ref<FileAccess> file;
     };
 
     class GodotFileRunner {
@@ -42,7 +43,7 @@ namespace Callbacks {
 
         bool stop = false;
         FMOD_ASYNCREADINFO* current_request = nullptr;
-        godot::List<FMOD_ASYNCREADINFO*> requests = godot::List<FMOD_ASYNCREADINFO*>();
+        List<FMOD_ASYNCREADINFO*> requests = List<FMOD_ASYNCREADINFO*>();
 
         GodotFileRunner() = default;
         GodotFileRunner(const GodotFileRunner&) = delete;
