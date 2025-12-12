@@ -5,9 +5,9 @@ import subprocess
 
 from SCons.Script import SConscript, ARGUMENTS, Action, Copy
 
-target_path = ARGUMENTS.pop("target_path", "demo/addons/fmod/libs/")
+target_path = ARGUMENTS.pop("target_path", "./bin/")
 target_name = ARGUMENTS.pop("target_name", "libGodotFmod")
-fmod_lib_dir = ARGUMENTS.pop("fmod_lib_dir", "../libs/fmod/")
+fmod_lib_dir = ARGUMENTS.pop("fmod_lib_dir", "libs/fmod/")
 
 # Although FMOD's WebAssembly libraries are built with pthreads / shared memory support, Godot doesn't yet like it.
 # For web builds, default to single-threaded godot-cpp (unless the user explicitly overrides it).
@@ -16,6 +16,8 @@ if platform_arg == "web" and "threads" not in ARGUMENTS:
     ARGUMENTS["threads"] = "no"
 
 Import('env')
+
+env = env.Clone()
 
 # Add those directory manually, so we can skip the godot_cpp directory when including headers in C++ files
 source_path = [
