@@ -5,7 +5,7 @@
 
 //using namespace godot;
 
-void initialize_fmod_module(ModuleInitializationLevel p_level);
-void uninitialize_fmod_module(ModuleInitializationLevel p_level);
+void initialize_fmod_gdextension_module(ModuleInitializationLevel p_level);
+void uninitialize_fmod_gdextension_module(ModuleInitializationLevel p_level);
 
 #endif// ! FMOD_REGISTER_TYPES_H
