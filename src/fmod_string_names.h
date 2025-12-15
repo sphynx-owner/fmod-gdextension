@@ -11,14 +11,14 @@ class FmodStringNames {
     friend void initialize_fmod_module(ModuleInitializationLevel p_level);
     friend void uninitialize_fmod_module(ModuleInitializationLevel p_level);
 
-    static void create();
-    static void free();
 
     static FmodStringNames* instance;
 
     FmodStringNames();
 
 public:
+    static void create();
+    static void free();
     static FmodStringNames* get_instance();
 
     static constexpr const char* EVENT_PARAMETER_PREFIX_FOR_PROPERTIES = "fmod_parameters";

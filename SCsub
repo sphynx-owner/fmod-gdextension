@@ -5,28 +5,53 @@ import subprocess
 
 from SCons.Script import SConscript, ARGUMENTS, Action, Copy
 
-target_path = ARGUMENTS.pop("target_path", "./bin/")
-target_name = ARGUMENTS.pop("target_name", "libGodotFmod")
+MACOS = "macos"
+LINUX = "linux"
+WINDOWS = "windows"
+IOS = "ios"
+ANDROID = "android"
+WEB = "web"
+
+# target_path = ARGUMENTS.pop("target_path", "./bin/")
+# target_name = ARGUMENTS.pop("target_name", "libGodotFmod")
 fmod_lib_dir = ARGUMENTS.pop("fmod_lib_dir", "libs/fmod/")
 
 # Although FMOD's WebAssembly libraries are built with pthreads / shared memory support, Godot doesn't yet like it.
 # For web builds, default to single-threaded godot-cpp (unless the user explicitly overrides it).
 platform_arg = ARGUMENTS.get("platform")
-if platform_arg == "web" and "threads" not in ARGUMENTS:
+
+if platform_arg == WEB and "threads" not in ARGUMENTS:
     ARGUMENTS["threads"] = "no"
 
 Import('env')
+Import("env_modules")
 
-env = env.Clone()
+#env = env.Clone()
 
-# Add those directory manually, so we can skip the godot_cpp directory when including headers in C++ files
-source_path = [
-    os.path.join("godot-cpp", "include","godot_cpp"),
-    os.path.join("godot-cpp", "gen", "include","godot_cpp")
-]
-env.Append(CPPPATH=[env.Dir(d) for d in source_path])
+# "template_debug"/"template_release"/"editor"
+compile_target = env["target"]
 
-env.Replace(fmod_lib_dir = fmod_lib_dir)
+architecture = env["arch"]
+
+source_paths = []
+
+include_paths = []
+
+lib_paths = []
+
+libs = []
+
+link_flags = []
+
+cc_flags = []
+
+# # Add those directory manually, so we can skip the godot_cpp directory when including headers in C++ files
+# godot_cpp_source_path = [
+#     os.path.join("godot-cpp", "include","godot_cpp"),
+#     os.path.join("godot-cpp", "gen", "include","godot_cpp")
+# ]
+
+# source_paths.extend([env.Dir(d) for d in godot_cpp_source_path])
 
 # For the reference:
 # - CCFLAGS are compilation flags shared between C and C++
@@ -37,36 +62,96 @@ env.Replace(fmod_lib_dir = fmod_lib_dir)
 # - LINKFLAGS are for linking flags
 
 # tweak this if you want to use different folders, or more folders, to store your source code in.
-env.Append(CPPPATH=["src/"])
-sources = [
-    Glob('src/*.cpp'),
-    Glob('src/callback/*.cpp'),
-    Glob('src/core/*.cpp'),
-    Glob('src/data/*.cpp'),
-    Glob('src/tools/*.cpp'),
-    Glob('src/helpers/*.cpp'),
-    Glob('src/nodes/*.cpp'),
-    Glob('src/resources/*.cpp'),
-    Glob('src/studio/*.cpp'),
-    Glob('src/plugins/*.cpp')
-    ]
+source_glob_paths = [
+    '*.cpp',
+    'src/*.cpp',
+    'src/callback/*.cpp',
+    'src/core/*.cpp',
+    'src/data/*.cpp',
+    'src/tools/*.cpp',
+    'src/helpers/*.cpp',
+    'src/nodes/*.cpp',
+    'src/resources/*.cpp',
+    'src/studio/*.cpp',
+    'src/plugins/*.cpp',
+]
+
+[source_paths.extend(Glob(path, strings=True)) for path in source_glob_paths]
+
+print(source_paths)
 
 lfix = ""
+
 debug = False
-if env["target"] == "template_debug" or env["target"] == "editor":
+
+if compile_target == "template_debug" or compile_target == "editor":
     lfix = "L"
     debug = True
 
-if env["platform"] == "macos":
-    libfmod = 'libfmod%s.dylib' % lfix
-    libfmodstudio = 'libfmodstudio%s.dylib' % lfix
 
-    env.Append(CPPPATH=[env['fmod_lib_dir'] + 'osx/core/inc/', env['fmod_lib_dir'] + 'osx/studio/inc/'])
-    env.Append(LIBPATH=[env['fmod_lib_dir'] + 'osx/core/lib/', env['fmod_lib_dir'] + 'osx/studio/lib/'])
-    env.Append(LIBS=[libfmod, libfmodstudio])
+studio_inc_dir = "/studio/inc/"
+core_inc_dir = "/core/inc/"
+studio_lib_dir = "/studio/lib/"
+core_lib_dir = "/core/lib/"
 
-    env.Append(
-        LINKFLAGS=[
+platform_dir = platform_arg if platform_arg != MACOS else "osx"
+
+arch_info_table = {}
+
+if platform_arg == WINDOWS:
+    arch_info_table = {
+        "x86_64" : "x64",
+        "x86_32" : "x86",
+    }
+elif platform_arg == LINUX:
+    arch_info_table = {
+        "x86_64": "x86_64",
+        "x86_32": "x86_32",
+        "arm64": "arm64",
+        "rv64": "rv64",
+    }
+elif platform_arg == ANDROID:
+    arch_info_table = {
+        "armv7": "armeabi-v7a",
+        "arm64": "arm64-v8a",
+        "x86": "x86",
+        "x86_64": "x86_64"
+    }
+
+
+arch_dir = ""
+
+if architecture in arch_info_table:
+    arch_dir = arch_info_table[architecture] + "/"
+
+include_paths.extend([fmod_lib_dir + platform_dir + core_inc_dir, fmod_lib_dir + platform_dir + studio_inc_dir])
+    
+lib_paths.extend([fmod_lib_dir + platform_dir + core_lib_dir + arch_dir, fmod_lib_dir + platform_dir + studio_lib_dir + arch_dir])
+
+lib_prefix = "lib" if platform_arg != WEB and platform_arg != WINDOWS else ""
+
+lib_suffixes = {
+    MACOS: ".dylib",
+    LINUX: ".so",
+    WINDOWS:"_vc.lib",
+    IOS: "_iphoneos.a",
+    ANDROID: ".so",
+    WEB: "_wasm.a",
+}
+
+core_lib = lib_prefix + "fmod" + lfix + lib_suffixes[platform_arg]
+
+studio_lib = lib_prefix + "fmodstudio" + lfix + lib_suffixes[platform_arg]
+
+if platform_arg == WEB:
+    link_flags.extend([core_lib, studio_lib])
+else:
+    libs.extend([File(fmod_lib_dir + platform_dir + core_lib_dir + arch_dir + core_lib), File(fmod_lib_dir + platform_dir + studio_lib_dir + arch_dir + studio_lib)])
+
+
+if platform_arg == MACOS:
+    link_flags.extend(
+        [
             "-framework",
             "Cocoa",
             "-Wl,-undefined,dynamic_lookup",
@@ -74,158 +159,107 @@ if env["platform"] == "macos":
         ]
     )
 
-elif env["platform"] == "linux":
-    libfmod = 'libfmod%s.so'% lfix
-    libfmodstudio = 'libfmodstudio%s.so'% lfix
+elif platform_arg == LINUX:
+    cc_flags.extend(["-fPIC", "-Wwrite-strings"])
+    
+    link_flags.extend(["-Wl,-R,'$$ORIGIN'", "-m64", "-fuse-ld=gold"])
 
-    env.Append(CPPPATH=[env['fmod_lib_dir'] + 'linux/core/inc/', env['fmod_lib_dir'] + 'linux/studio/inc/'])
-    env.Append(LIBPATH=[env['fmod_lib_dir'] + 'linux/core/lib/' + env["arch"], env['fmod_lib_dir'] + 'linux/studio/lib/' + env["arch"]])
-    env.Append(LIBS=[libfmod, libfmodstudio])
-
-    env.Append(CCFLAGS=["-fPIC", "-Wwrite-strings"])
-    env.Append(LINKFLAGS=["-Wl,-R,'$$ORIGIN'"])
-    env.Append(LINKFLAGS=["-m64", "-fuse-ld=gold"])
-
-elif env["platform"] == "windows":
-    libfmod = 'fmod%s_vc'% lfix
-    libfmodstudio = 'fmodstudio%s_vc'% lfix
-    fmod_info_table = {
-        "x86_64" : "x64",
-        "x86_32" : "x86",
-    }
-    arch_suffix_override = fmod_info_table[env["arch"]]
-
-    env.Append(CPPPATH=[env['fmod_lib_dir'] + 'windows/core/inc/', env['fmod_lib_dir'] + 'windows/studio/inc/'])
-    env.Append(LIBPATH=[env['fmod_lib_dir'] + 'windows/core/lib/' + arch_suffix_override, env['fmod_lib_dir'] + 'windows/studio/lib/' + arch_suffix_override])
-    env.Append(LIBS=[libfmod, libfmodstudio])
-
-    env.Append(LINKFLAGS=["/WX"])
+elif platform_arg == WINDOWS:
+    link_flags.extend(["/WX"])
+    
     if debug:
-        env.Append(CCFLAGS=["/FS", "/Zi"])
+        cc_flags.extend(["/FS", "/Zi"])
 
-elif env["platform"] == "ios":
-    libfmod = 'libfmod%s_iphoneos.a' % lfix
-    libfmodstudio = 'libfmodstudio%s_iphoneos.a' % lfix
-
-    env.Append(CPPPATH=[env['fmod_lib_dir'] + 'ios/core/inc/', env['fmod_lib_dir'] + 'ios/studio/inc/'])
-    env.Append(LIBPATH=[env['fmod_lib_dir'] + 'ios/core/lib/', env['fmod_lib_dir'] + 'ios/studio/lib/'])
-    env.Append(LIBS=[libfmod, libfmodstudio])
-
-    env.Append(LINKFLAGS=[
+elif platform_arg == IOS:
+    link_flags.extend([
         '-Wl,-undefined,dynamic_lookup', "-miphoneos-version-min=" + env["ios_min_version"]
     ])
 
-elif env["platform"] == "android":
-    libfmod = 'libfmod%s.so' % lfix
-    libfmodstudio = 'libfmodstudio%s.so' % lfix
-    fmod_info_table = {
-        "armv7": "armeabi-v7a",
-        "arm64": "arm64-v8a",
-        "x86": "x86",
-        "x86_64": "x86_64"
-    }
-    arch_dir = fmod_info_table[env["arch"]]
+elif platform_arg == WEB:
+    link_flags.extend(["-sEXPORTED_RUNTIME_METHODS=ccall,cwrap,setValue,getValue"])
 
-    env.Append(CPPPATH=[env['fmod_lib_dir'] + 'android/core/inc/', env['fmod_lib_dir'] + 'android/studio/inc/'])
-    env.Append(LIBPATH=[env['fmod_lib_dir'] + 'android/core/lib/' + arch_dir, env['fmod_lib_dir'] + 'android/studio/lib/' + arch_dir])
-    env.Append(LIBS=[libfmod, libfmodstudio])
-
-elif env["platform"] == "web":
-    html_lib = os.path.join(fmod_lib_dir, 'web/studio/lib/w32/')
-    html_inc = os.path.join(fmod_lib_dir, 'web/studio/inc/')
-
-    html_core_lib = os.path.join(fmod_lib_dir, 'web/core/lib/w32/')
-    html_core_inc = os.path.join(fmod_lib_dir, 'web/core/inc/')
-
-    libfmodstudio_path = os.path.join(html_lib, 'fmodstudio%s_wasm.a' % lfix)
-
-    env.Append(CPPPATH=[html_inc, html_core_inc])
-    env.Append(LIBPATH=[html_lib])
-    # env.Append(LIBS=[libfmodstudio])  # ← REMOVE or comment this out
-    env.Append(LINKFLAGS=[libfmodstudio_path])
-    env.Append(LINKFLAGS=["-sEXPORTED_RUNTIME_METHODS=ccall,cwrap,setValue,getValue"])
-
-#Output is placed in the addons directory of the demo project directly
-target = "{}{}/{}.{}.{}".format(
-    target_path, env["platform"], target_name, env["platform"], env["target"]
-) if env["platform"] != "android" else "{}{}/{}/{}.{}.{}".format(
-    target_path, env["platform"], env["arch"], target_name, env["platform"], env["target"]
-)
-
-if env["platform"] == "macos":
-    target = "{}.framework/{}.{}.{}".format(
-        target,
-        target_name,
-        env["platform"],
-        env["target"]
-    )
-else:
-    target = "{}.{}{}".format(
-        target,
-        env["arch"],
-        env["SHLIBSUFFIX"]
-    )
-
-library = env.SharedLibrary(target=target, source=sources)
+env_module = env
 
 
-def sys_exec(args):
-    proc = subprocess.Popen(args, stdout=subprocess.PIPE, text=True)
-    (out, err) = proc.communicate()
-    return out.rstrip("\r\n").lstrip()
+env_module = env.Clone()
+env_module.add_source_files(env.modules_sources, source_paths)
+env_module.Append(CPPPATH=include_paths)
+env_module.Append(CPPPATH="src/")
+env_module.Append(CPPPATH="./")
+
+env.Append(LIBPATH=lib_paths)
+env.Append(LIBS=libs)
+# env.Append(LINKFLAGS=link_flags)
+# env.Append(CCFLAGS=cc_flags)
 
 
-if env["platform"] == "ios":
-    xcframework_path = "{}{}/{}.{}.{}.xcframework".format(
-        target_path,
-        env["platform"],
-        target_name,
-        env["platform"],
-        env["target"]
-    )
-
-    def create_xcframework(self, arg, env, executor = None):
-        sys_exec(["xcodebuild", "-create-xcframework", "-library", target, "-output", xcframework_path])
-        sys_exec(["rm", target])
-        sys_exec(["/usr/libexec/PlistBuddy", "-c", "Add :MinimumOSVersion string " + env["ios_min_version"], "{}/Info.plist".format(xcframework_path)])
-
-    create_xcframework_action = Action('', create_xcframework)
-
-    AddPostAction(library, create_xcframework_action)
+# #Output is placed in the addons directory of the demo project directly
+# target = "{}{}/{}.{}.{}".format(
+#     target_path, platform_arg, target_name, platform_arg, compile_target
+# ) \
+# if platform_arg != ANDROID \
+# else "{}{}/{}/{}.{}.{}".format(
+#     target_path, platform_arg, architecture, target_name, platform_arg, compile_target
+# )
 
 
-def copy_fmod_libraries(self, arg, env, executor = None):
-    fmod_core_lib_dir = ""
-    fmod_studio_lib_dir = ""
+# if platform_arg == MACOS:
+#     target = "{}.framework/{}.{}.{}".format(
+#         target,
+#         target_name,
+#         platform_arg,
+#         compile_target
+#     )
+# else:
+#     target = "{}.{}{}".format(
+#         target,
+#         architecture,
+#         env["SHLIBSUFFIX"]
+#     )
 
-    addon_fmod_libs_output = "{}{}/".format(
-        target_path, env["platform"]
-    ) if env["platform"] != "android" else "{}{}/{}/".format(
-        target_path, env["platform"], env["arch"]
-    )
+#library = env.SharedLibrary(target=target, source=sources)
 
-    if env["platform"] == "macos":
-        fmod_core_lib_dir = env['fmod_lib_dir'] + 'osx/core/lib/'
-        fmod_studio_lib_dir = env['fmod_lib_dir'] + 'osx/studio/lib/'
-    elif env["platform"] == "linux":
-        fmod_core_lib_dir = env['fmod_lib_dir'] + 'linux/core/lib/' + env["arch"]
-        fmod_studio_lib_dir = env['fmod_lib_dir'] + 'linux/studio/lib/' + env["arch"]
-    elif env["platform"] == "windows":
-        fmod_core_lib_dir = env['fmod_lib_dir'] + 'windows/core/lib/' + arch_suffix_override + '/'
-        fmod_studio_lib_dir = env['fmod_lib_dir'] + 'windows/studio/lib/' + arch_suffix_override + '/'
-    elif env["platform"] == "ios":
-        fmod_core_lib_dir = env['fmod_lib_dir'] + 'ios/core/lib/'
-        fmod_studio_lib_dir = env['fmod_lib_dir'] + 'ios/studio/lib/'
-    elif env["platform"] == "android":
-        fmod_core_lib_dir = env['fmod_lib_dir'] + 'android/core/lib/' + arch_dir
-        fmod_studio_lib_dir = env['fmod_lib_dir'] + 'android/studio/lib/' + arch_dir
 
-    source_files = [env.Glob(os.path.join(source_dir, '*.*')) for source_dir in [fmod_core_lib_dir, fmod_studio_lib_dir]]
-    [[shutil.copy(str(file), addon_fmod_libs_output) for file in files] for files in source_files]
+# def sys_exec(args):
+#     proc = subprocess.Popen(args, stdout=subprocess.PIPE, text=True)
+#     (out, err) = proc.communicate()
+#     return out.rstrip("\r\n").lstrip()
 
-# web bundles everything inside the final .wasm - no need to export libs
-if env["platform"] != "web":
-    copy_fmod_libraries_action = Action('', copy_fmod_libraries)
-    AddPostAction(library, copy_fmod_libraries_action)
 
-Default(library)
+# if platform_arg == IOS:
+#     xcframework_path = "{}{}/{}.{}.{}.xcframework".format(
+#         target_path,
+#         platform_arg,
+#         target_name,
+#         platform_arg,
+#         compile_target
+#     )
+
+#     def create_xcframework(self, arg, env, executor = None):
+#         sys_exec(["xcodebuild", "-create-xcframework", "-library", target, "-output", xcframework_path])
+#         sys_exec(["rm", target])
+#         sys_exec(["/usr/libexec/PlistBuddy", "-c", "Add :MinimumOSVersion string " + env["ios_min_version"], "{}/Info.plist".format(xcframework_path)])
+
+#     create_xcframework_action = Action('', create_xcframework)
+
+#     AddPostAction(library, create_xcframework_action)
+
+
+# def copy_fmod_libraries(self, arg, env, executor = None):
+#     addon_fmod_libs_output = "{}{}/".format(
+#         target_path, platform_arg
+#     ) if platform_arg != ANDROID else "{}{}/{}/".format(
+#         target_path, platform_arg, architecture
+#     )
+
+#     source_files = [env.Glob(os.path.join(source_dir, '*.*')) for source_dir in lib_paths]
+    
+#     [[shutil.copy(str(file), addon_fmod_libs_output) for file in files] for files in source_files]
+
+
+# # web bundles everything inside the final .wasm - no need to export libs
+# if platform_arg != WEB:
+#     copy_fmod_libraries_action = Action('', copy_fmod_libraries)
+#     AddPostAction(library, copy_fmod_libraries_action)
+
+# Default(library)
