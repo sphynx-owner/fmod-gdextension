@@ -128,7 +128,7 @@ elif platform_arg == WEB:
 
 include_paths.extend([fmod_lib_dir + platform_dir + core_inc_dir, fmod_lib_dir + platform_dir + studio_inc_dir])
     
-lib_paths.extend([fmod_lib_dir + platform_dir + core_lib_dir + arch_dir, fmod_lib_dir + platform_dir + studio_lib_dir + arch_dir])
+lib_paths.extend([fmod_lib_dir + platform_dir + studio_lib_dir + arch_dir])
 
 lib_prefix = "lib" if platform_arg != WEB and platform_arg != WINDOWS else ""
 
@@ -148,7 +148,10 @@ studio_lib = lib_prefix + "fmodstudio" + lfix + lib_suffixes[platform_arg]
 # if platform_arg == WEB:
 #     link_flags.extend([core_lib, studio_lib])
 # else:
-libs.extend([File(fmod_lib_dir + platform_dir + core_lib_dir + arch_dir + core_lib), File(fmod_lib_dir + platform_dir + studio_lib_dir + arch_dir + studio_lib)])
+libs.extend([
+    # File(fmod_lib_dir + platform_dir + core_lib_dir + arch_dir + core_lib), 
+    File(fmod_lib_dir + platform_dir + studio_lib_dir + arch_dir + studio_lib)
+])
 
 
 if platform_arg == MACOS:
@@ -190,8 +193,8 @@ env_module.Append(CPPPATH="src/")
 env_module.Append(CPPPATH="./")
 # env.Append(LINKFLAGS=link_flags)
 
-env.Append(LIBPATH=lib_paths)
-env.Append(LIBS=libs)
+# env.Append(LIBPATH=lib_paths)
+# env.Append(LIBS=libs)
 # env.Append(CCFLAGS=cc_flags)
 
 
