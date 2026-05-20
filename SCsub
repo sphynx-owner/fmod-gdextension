@@ -82,11 +82,18 @@ print(source_paths)
 
 lfix = ""
 
+pfix = ""
+
 debug = False
 
 if compile_target == "template_debug" or compile_target == "editor":
     lfix = "L"
     debug = True
+
+
+if ARGUMENTS["threads"] == "yes":
+    print("adding pfix")
+    pfix = "P"
 
 
 studio_inc_dir = "/studio/inc/"
@@ -141,9 +148,9 @@ lib_suffixes = {
     WEB: "_wasm.a",
 }
 
-core_lib = lib_prefix + "fmod" + lfix + lib_suffixes[platform_arg]
+core_lib = lib_prefix + "fmod" + pfix + lfix + lib_suffixes[platform_arg]
 
-studio_lib = lib_prefix + "fmodstudio" + lfix + lib_suffixes[platform_arg]
+studio_lib = lib_prefix + "fmodstudioP" + pfix + lfix + lib_suffixes[platform_arg]
 
 # if platform_arg == WEB:
 #     link_flags.extend([core_lib, studio_lib])

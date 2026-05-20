@@ -12,17 +12,18 @@
 
 //#include <godot.hpp>
 #include <core/variant/variant_utility.h>
+#include <core/error/error_macros.h>
 
 #define MAX_PATH_SIZE 512
 #define MAX_DRIVER_NAME_SIZE 256
 
-#define GODOT_LOG_INFO(message) //VariantUtilityFunctions::print(message);
-#define GODOT_LOG_VERBOSE(message) //VariantUtilityFunctions::print_verbose(message);
-#define GODOT_LOG_WARNING(message) //VariantUtilityFunctions::push_warning(message, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
-#define GODOT_LOG_ERROR(message) //VariantUtilityFunctions::push_error(message, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__);
+#define GODOT_LOG_INFO(message) WARN_PRINT(message);
+#define GODOT_LOG_VERBOSE(message) WARN_PRINT(message);
+#define GODOT_LOG_WARNING(message) WARN_PRINT(message);
+#define GODOT_LOG_ERROR(message) WARN_PRINT(message);
 
 #define ERROR_CHECK_WITH_REASON(_result, _reason) \
-(((_result) != FMOD_OK) ? (/*godot::VariantUtilityFunctions::push_error(_reason, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__),*/ false) : true)
+(((_result) != FMOD_OK) ? (WARN_PRINT(_reason),false) : true)
 
 #define ERROR_CHECK(_result) ((_result) == FMOD_OK)
 
