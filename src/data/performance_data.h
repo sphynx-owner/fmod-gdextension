@@ -1,6 +1,7 @@
 #ifndef GODOTFMOD_PERFORMANCE_DATA_H
 #define GODOTFMOD_PERFORMANCE_DATA_H
 
+#include "core/object/class_db.h"
 #include "core/object/ref_counted.h"
 
 //namespace godot {

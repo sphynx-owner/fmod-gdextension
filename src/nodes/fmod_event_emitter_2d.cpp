@@ -12,6 +12,13 @@ void FmodEventEmitter2D::_notification(int p_what) {
 
 void FmodEventEmitter2D::_bind_methods() {
     FmodEventEmitter<FmodEventEmitter2D, Node2D>::_bind_methods();
+
+    ADD_SIGNAL(MethodInfo(BEAT_SIGNAL_STRING, PropertyInfo(Variant::DICTIONARY, "params")));
+    ADD_SIGNAL(MethodInfo(MARKER_SIGNAL_STRING, PropertyInfo(Variant::DICTIONARY, "params")));
+    ADD_SIGNAL(MethodInfo(START_FAILED_SIGNAL_STRING));
+    ADD_SIGNAL(MethodInfo(STARTED_SIGNAL_STRING));
+    ADD_SIGNAL(MethodInfo(RESTARTED_SIGNAL_STRING));
+    ADD_SIGNAL(MethodInfo(STOPPED_SIGNAL_STRING));
 }
 
 void FmodEventEmitter2D::free_impl() {

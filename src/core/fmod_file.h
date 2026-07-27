@@ -1,6 +1,7 @@
 #ifndef GODOTFMOD_FMOD_FILE_H
 #define GODOTFMOD_FMOD_FILE_H
 
+#include "core/object/class_db.h"
 #include "core/object/ref_counted.h"
 #include "fmod.hpp"
 

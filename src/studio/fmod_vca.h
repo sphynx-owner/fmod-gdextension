@@ -1,6 +1,7 @@
 #ifndef GODOTFMOD_FMOD_VCA_H
 #define GODOTFMOD_FMOD_VCA_H
 
+#include "core/object/class_db.h"
 #include "core/object/ref_counted.h"
 #include "fmod_studio.hpp"
 #include "helpers/common.h"

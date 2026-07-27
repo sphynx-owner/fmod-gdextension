@@ -2,6 +2,7 @@
 #define GODOTFMOD_FMOD_PLUGINS_SETTINGS_H
 
 
+#include "core/object/class_db.h"
 #include <core/io/resource.h>
 
 //namespace godot {

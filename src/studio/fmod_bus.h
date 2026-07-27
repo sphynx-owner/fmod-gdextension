@@ -1,6 +1,7 @@
 #ifndef GODOTFMOD_FMOD_BUS_H
 #define GODOTFMOD_FMOD_BUS_H
 
+#include "core/object/class_db.h"
 #include "fmod_studio.hpp"
 #include "helpers/common.h"
 

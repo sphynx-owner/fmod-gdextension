@@ -3,6 +3,7 @@
 
 #include "fmod_studio.h"
 
+#include "core/object/class_db.h"
 #include <core/io/resource.h>
 
 //namespace godot {

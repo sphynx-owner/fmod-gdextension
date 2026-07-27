@@ -1,6 +1,7 @@
 #ifndef GODOTFMOD_FMOD_PARAMETER_DESCRIPTION_H
 #define GODOTFMOD_FMOD_PARAMETER_DESCRIPTION_H
 
+#include "core/object/class_db.h"
 #include "fmod_studio_common.h"
 #include <core/object/ref_counted.h>
 

@@ -107,7 +107,7 @@ elif env["platform"] == "ios":
 
     env.Append(CPPPATH=[env['fmod_lib_dir'] + 'ios/core/inc/', env['fmod_lib_dir'] + 'ios/studio/inc/'])
     env.Append(LIBPATH=[env['fmod_lib_dir'] + 'ios/core/lib/', env['fmod_lib_dir'] + 'ios/studio/lib/'])
-    env.Append(LIBS=[libfmod, libfmodstudio])
+    # env.Append(LIBS=[libfmod, libfmodstudio])
 
     env.Append(LINKFLAGS=[
         '-Wl,-undefined,dynamic_lookup', "-miphoneos-version-min=" + env["ios_min_version"]
@@ -126,7 +126,7 @@ elif env["platform"] == "android":
 
     env.Append(CPPPATH=[env['fmod_lib_dir'] + 'android/core/inc/', env['fmod_lib_dir'] + 'android/studio/inc/'])
     env.Append(LIBPATH=[env['fmod_lib_dir'] + 'android/core/lib/' + arch_dir, env['fmod_lib_dir'] + 'android/studio/lib/' + arch_dir])
-    env.Append(LIBS=[libfmod, libfmodstudio])
+    # env.Append(LIBS=[libfmod, libfmodstudio])
 
 elif env["platform"] == "web":
     html_lib = os.path.join(fmod_lib_dir, 'web/studio/lib/w32/')
@@ -222,8 +222,8 @@ def copy_fmod_libraries(self, arg, env, executor = None):
     [[shutil.copy(str(file), addon_fmod_libs_output) for file in files] for files in source_files]
 
 # web bundles everything inside the final .wasm - no need to export libs
-if env["platform"] != "web":
-    copy_fmod_libraries_action = Action('', copy_fmod_libraries)
-    AddPostAction(library, copy_fmod_libraries_action)
+# if env["platform"] != "web":
+#     copy_fmod_libraries_action = Action('', copy_fmod_libraries)
+#     AddPostAction(library, copy_fmod_libraries_action)
 
 Default(library)

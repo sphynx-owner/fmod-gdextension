@@ -1,6 +1,7 @@
 #ifndef GODOTFMOD_FMOD_EVENT_EMITTER_H
 #define GODOTFMOD_FMOD_EVENT_EMITTER_H
 
+#include "core/object/class_db.h"
 #include "core/object/object.h"
 
 #include <constants.h>
@@ -884,13 +885,6 @@ static constexpr const char* STOPPED_SIGNAL_STRING = "stopped";
         ADD_PROPERTY(PropertyInfo(Variant::BOOL, "preload_event", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_DEFAULT), "set_preload_event", "is_preload_event");
         ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "volume", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_DEFAULT), "set_volume", "get_volume");
         ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "paused", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NONE), "set_paused", "is_paused");
-
-        ADD_SIGNAL(MethodInfo(BEAT_SIGNAL_STRING, PropertyInfo(Variant::DICTIONARY, "params")));
-        ADD_SIGNAL(MethodInfo(MARKER_SIGNAL_STRING, PropertyInfo(Variant::DICTIONARY, "params")));
-        ADD_SIGNAL(MethodInfo(START_FAILED_SIGNAL_STRING));
-        ADD_SIGNAL(MethodInfo(STARTED_SIGNAL_STRING));
-        ADD_SIGNAL(MethodInfo(RESTARTED_SIGNAL_STRING));
-        ADD_SIGNAL(MethodInfo(STOPPED_SIGNAL_STRING));
     }
 //}
 #endif// GODOTFMOD_FMOD_EVENT_EMITTER_H

@@ -1,6 +1,7 @@
 #ifndef GODOTFMOD_FMOD_SOUND_3D_SETTINGS_H
 #define GODOTFMOD_FMOD_SOUND_3D_SETTINGS_H
 
+#include "core/object/class_db.h"
 #include <core/io/resource.h>
 
 //namespace godot {
